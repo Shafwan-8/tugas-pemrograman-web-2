@@ -12,7 +12,6 @@
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        
     @endif
 
     <div class="card border-1 bordered shadow-sm">
@@ -39,6 +38,10 @@
                             <td>{{ $member->alamat }}</td>
                             <td>{{ $member->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
                             <td class="text-center text-nowrap">
+                                <a href="{{ route('members.edit', $member->id) }}" class="btn btn-sm btn-warning" role="button"
+                                    title="Edit">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
                             </td>
                         </tr>
                     @endforeach
