@@ -28,7 +28,7 @@
                         <a class="nav-link" href="{{ route('members.index') }}">Daftar Anggota</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Pinjaman</a>
+                        <a class="nav-link" href="{{ route('loans.index') }}">Pinjaman</a>
                     </li>
                 </ul>
             </div>

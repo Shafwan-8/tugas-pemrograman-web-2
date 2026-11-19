@@ -55,7 +55,9 @@
                     <tbody>
                         @forelse($member->loans as $loan)
                             <tr>
-                                <td>{{ $loan->kode_peminjaman }}</td>
+                                <td>
+                                    <span class="badge bg-secondary text-white">{{ $loan->kode_peminjaman }}</span>
+                                </td>
                                 <td>{{ $loan->judul_buku }}</td>
                                 <td>{{ $loan->tanggal_pinjam }}</td>
                                 <td>{{ $loan->tanggal_jatuh_tempo }}</td>
