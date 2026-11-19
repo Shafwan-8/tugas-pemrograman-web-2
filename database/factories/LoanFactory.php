@@ -27,7 +27,7 @@ class LoanFactory extends Factory
             'judul_buku' => $this->faker->sentence(3),
             'tanggal_pinjam' => $this->faker->dateTimeBetween('-1 month', 'now')->format('Y-m-d'),
             'tanggal_jatuh_tempo' => $this->faker->dateTimeBetween('now', '+1 month')->format('Y-m-d'),
-            'tanggal_kembali' => null,
+            'tanggal_kembali' => $this->faker->optional()->dateTimeBetween('now', '+1 month')->format('Y-m-d'),
             'status' => $this->faker->randomElement(['dipinjam', 'dikembalikan', 'terlambat']),
             'denda' => 0,
         ];

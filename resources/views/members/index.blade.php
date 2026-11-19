@@ -43,6 +43,11 @@
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
 
+                                <a href="{{ route('members.show', $member->id) }}" class="btn btn-sm btn-info" role="button"
+                                    title="Detail">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+
                                 <form action="{{ route('members.destroy', $member->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class MemberController extends Controller
 {
@@ -13,6 +14,10 @@ class MemberController extends Controller
     public function index()
     {
         $members = Member::latest()->get();
+
+        $members->each(function ($member) {
+            $member->alamat = Str::limit($member->alamat, 10);
+        });
 
         return view('members.index', [
             'title' => 'Daftar Anggota Perpustakaan',
@@ -64,7 +69,10 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
-        //
+        return view('members.show', [
+            'title' => 'Detail Anggota',
+            'member' => $member
+        ]);
     }
 
     /**
