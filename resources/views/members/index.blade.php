@@ -4,8 +4,16 @@
     </x-slot:title>
 
     <div class="d-flex justify-content-end mb-3">
-        <a href="#" class="btn btn-primary">Tambah Anggota</a>
+        <a href="{{ route('members.create') }}" class="btn btn-primary">Tambah Anggota</a>
     </div>
+
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+    @endif
 
     <div class="card border-1 bordered shadow-sm">
         <div class="table-responsive">

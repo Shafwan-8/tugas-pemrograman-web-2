@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable([
     'nama', 
     'email', 
-    'no_telpon', 
+    'no_telepon', 
     'alamat', 
     'jenis_kelamin'
     ])

@@ -25,7 +25,9 @@ class MemberController extends Controller
      */
     public function create()
     {
-        //
+        return view('members.create', [
+            'title' => 'Tambah Anggota Perpustakaan'
+        ]);
     }
 
     /**
@@ -33,7 +35,28 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'nama' => 'required|string',
+            'email' => 'required|email|unique:members,email',
+            'no_telepon' => 'required|string|max:13',
+            'alamat' => 'required|string',
+            'jenis_kelamin' => 'required',
+        ],
+        [
+            'nama.required' => 'Nama anggota harus diisi.',
+            'email.required' => 'Email anggota harus diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email anggota sudah digunakan.',
+            'no_telepon.required' => 'No telepon anggota harus diisi.',
+            'no_telepon.max' => 'No telepon anggota tidak boleh lebih dari 13 karakter.',
+            'alamat.required' => 'Alamat anggota harus diisi.',
+            'jenis_kelamin.required' => 'Jenis kelamin anggota harus dipilih.',
+        ]
+        );
+
+        Member::create($validatedData);
+
+        return redirect()->route('members.index')->with('success', 'Anggota berhasil ditambahkan.');
     }
 
     /**
