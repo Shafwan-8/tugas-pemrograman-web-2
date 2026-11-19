@@ -132,6 +132,8 @@ class MemberController extends Controller
      */
     public function destroy(Member $member)
     {
-        //
+        $member->delete();
+
+        return to_route('members.index')->with('success', 'Data anggota berhasil dihapus.');
     }
 }

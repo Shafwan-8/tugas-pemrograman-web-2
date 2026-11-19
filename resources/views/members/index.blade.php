@@ -42,6 +42,15 @@
                                     title="Edit">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
+
+                                <form action="{{ route('members.destroy', $member->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus"
+                                        onclick="return confirm('Are you sure?')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
