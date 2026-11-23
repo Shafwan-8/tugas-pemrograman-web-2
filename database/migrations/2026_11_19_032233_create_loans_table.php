@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('member_id')->constrained()->cascadeOnDelete();
-            $table->string('kode_peminjaman')->unique();
+            $table->string('kode_peminjaman');
             $table->string('judul_buku');
             $table->date('tanggal_pinjam');
             $table->date('tanggal_jatuh_tempo');

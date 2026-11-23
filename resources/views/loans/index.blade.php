@@ -4,7 +4,7 @@
     </x-slot:title>
 
     <div class="d-flex justify-content-end mb-3">
-        <a href="#" class="btn btn-primary">Tambah Peminjaman</a>
+        <a href="{{ route('loans.create') }}" class="btn btn-primary">Tambah Peminjaman</a>
     </div>
 
     @if (session('success'))
