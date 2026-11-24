@@ -41,7 +41,7 @@
                             <td>{{ $loan->tanggal_jatuh_tempo }}</td>
                             <td>
                                 <span
-                                    class="badge {{ in_array($loan->status, ['dikembalikan']) ? 'bg-success' : (in_array($loan->status, ['terlambat']) ? 'bg-danger' : 'bg-warning text-dark') }}">
+                                    class="badge {{ $loan->status === 'dikembalikan' ? 'bg-success' : ($loan->status === 'terlambat' ? 'bg-danger' : 'bg-warning text-dark') }}">
                                     {{ $loan->status }}
                                 </span>
                             </td>
@@ -52,11 +52,16 @@
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
 
+                                <a href="{{ route('loans.show', $loan->id) }}" class="btn btn-sm btn-info" role="button"
+                                    title="Detail">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+
                                 <form action="{{ route('loans.destroy', $loan->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger" title="Hapus"
-                                        onclick="return confirm('Are you sure?')">
+                                        onclick="return confirm('Yakin ingin menghapus peminjaman {{ $loan->kode_peminjaman }}?')">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </form>
@@ -66,5 +71,5 @@
                 </tbody>
             </table>
         </div>
-    </div>
+        </div>
 </x-app>

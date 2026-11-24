@@ -10,12 +10,10 @@ use Illuminate\Http\Request;
 
 class LoanController extends Controller
 {
-
-    private function perbaruiStatusDenda(Loan $loan): void
+    private function perbaruiStatusDenda(Loan $loan)
     {
         $jatuhTempo = Carbon::parse($loan->tanggal_jatuh_tempo)->startOfDay();
 
-        // Acuan: tanggal kembali kalau sudah dikembalikan, kalau belum pakai hari ini
         $acuan = $loan->tanggal_kembali
             ? Carbon::parse($loan->tanggal_kembali)->startOfDay()
             : today();
@@ -31,6 +29,8 @@ class LoanController extends Controller
         } else {
             $loan->status = 'dipinjam';
         }
+
+        return $hariTerlambat;
     }
 
     /**
@@ -47,7 +47,7 @@ class LoanController extends Controller
 
         return view('loans.index', [
             'title' => 'Daftar Peminjaman Buku',
-            'loans' => $loans
+            'loans' => $loans,
         ]);
     }
 
@@ -59,7 +59,7 @@ class LoanController extends Controller
         return view('loans.create', [
             'title' => 'Tambah Peminjaman Buku',
             'members' => Member::all(),
-            'books' => Book::all()
+            'books' => Book::all(),
         ]);
     }
 
@@ -72,9 +72,9 @@ class LoanController extends Controller
 
         $kodeTerakhir = Loan::latest('id')->first()->id;
 
-        $kodePeminjaman = 'PJM-' . ($kodeTerakhir + 1);
+        $kodePeminjaman = 'PJM-'.($kodeTerakhir + 1);
         // dd($kodePeminjaman);
-        
+
         $request->merge(['kode_peminjaman' => $kodePeminjaman, 'tanggal_pinjam' => $tanggalPinjam]);
 
         $validatedData = $request->validate([
@@ -84,12 +84,12 @@ class LoanController extends Controller
             'tanggal_pinjam' => 'required|date',
             'tanggal_jatuh_tempo' => 'required|date|after_or_equal:tanggal_pinjam',
         ],
-        [ 
-            'member_id.required' => 'Anggota harus dipilih.',
-            'judul_buku.required' => 'Buku harus dipilih.',
-            'tanggal_jatuh_tempo.required' => 'Tanggal jatuh tempo harus diisi.',
-            'tanggal_jatuh_tempo.after_or_equal' => 'Tanggal jatuh tempo harus sama atau setelah tanggal hari ini.',
-        ]);
+            [
+                'member_id.required' => 'Anggota harus dipilih.',
+                'judul_buku.required' => 'Buku harus dipilih.',
+                'tanggal_jatuh_tempo.required' => 'Tanggal jatuh tempo harus diisi.',
+                'tanggal_jatuh_tempo.after_or_equal' => 'Tanggal jatuh tempo harus sama atau setelah tanggal hari ini.',
+            ]);
 
         // dd($validatedData);
         Loan::create($validatedData);
@@ -102,7 +102,15 @@ class LoanController extends Controller
      */
     public function show(Loan $loan)
     {
-        //
+        $hariTerlambat = $this->perbaruiStatusDenda($loan);
+        $loan->save();
+
+        return view('loans.show', [
+            'title' => 'Detail Peminjaman',
+            'loan' => $loan,
+            'hariTerlambat' => $hariTerlambat,
+            'dendaPerHari' => 1000,
+        ]);
     }
 
     /**
@@ -115,7 +123,7 @@ class LoanController extends Controller
             'title' => 'Edit Peminjaman Buku',
             'loan' => $loan,
             'members' => Member::all(),
-            'books' => Book::all()
+            'books' => Book::all(),
         ]);
     }
 
@@ -130,12 +138,12 @@ class LoanController extends Controller
             'tanggal_jatuh_tempo' => 'required|date',
             'tanggal_kembali' => 'nullable|date',
         ],
-        [ 
-            'member_id.required' => 'Anggota harus dipilih.',
-            'judul_buku.required' => 'Buku harus dipilih.',
-            'tanggal_jatuh_tempo.required' => 'Tanggal jatuh tempo harus diisi.',
-            'tanggal_jatuh_tempo.after_or_equal' => 'Tanggal jatuh tempo harus sama atau setelah tanggal hari ini.',
-        ]);
+            [
+                'member_id.required' => 'Anggota harus dipilih.',
+                'judul_buku.required' => 'Buku harus dipilih.',
+                'tanggal_jatuh_tempo.required' => 'Tanggal jatuh tempo harus diisi.',
+                'tanggal_jatuh_tempo.after_or_equal' => 'Tanggal jatuh tempo harus sama atau setelah tanggal hari ini.',
+            ]);
 
         $loan->update($validatedData);
 
