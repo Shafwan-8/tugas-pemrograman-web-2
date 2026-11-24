@@ -139,7 +139,7 @@ class LoanController extends Controller
 
         $loan->update($validatedData);
 
-        return to_route('loans.index')->with('success', 'Peminjaman berhasil diperbarui.');
+        return to_route('loans.index')->with('success', 'Data Peminjaman berhasil diperbarui.');
     }
 
     /**
@@ -147,6 +147,8 @@ class LoanController extends Controller
      */
     public function destroy(Loan $loan)
     {
-        //
+        $loan->delete();
+
+        return to_route('loans.index')->with('success', 'Data Peminjaman berhasil dihapus.');
     }
 }
