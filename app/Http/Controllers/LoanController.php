@@ -5,18 +5,49 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Loan;
 use App\Models\Member;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class LoanController extends Controller
 {
+
+    private function perbaruiStatusDenda(Loan $loan): void
+    {
+        $jatuhTempo = Carbon::parse($loan->tanggal_jatuh_tempo)->startOfDay();
+
+        // Acuan: tanggal kembali kalau sudah dikembalikan, kalau belum pakai hari ini
+        $acuan = $loan->tanggal_kembali
+            ? Carbon::parse($loan->tanggal_kembali)->startOfDay()
+            : today();
+
+        $hariTerlambat = max(0, (int) $jatuhTempo->diffInDays($acuan, false));
+        // dd($hariTerlambat);
+        $loan->denda = $hariTerlambat * 1000;
+
+        if ($loan->tanggal_kembali) {
+            $loan->status = 'dikembalikan';
+        } elseif ($hariTerlambat > 0) {
+            $loan->status = 'terlambat';
+        } else {
+            $loan->status = 'dipinjam';
+        }
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $loans = Loan::latest()->get();
+
+        foreach ($loans as $loan) {
+            $this->perbaruiStatusDenda($loan);
+            $loan->save();
+        }
+
         return view('loans.index', [
             'title' => 'Daftar Peminjaman Buku',
-            'loans' => Loan::latest()->get()
+            'loans' => $loans
         ]);
     }
 
@@ -37,11 +68,11 @@ class LoanController extends Controller
      */
     public function store(Request $request)
     {
-        $tanggalPinjam = now()->format('d-m-Y');
+        $tanggalPinjam = now()->format('Y-m-d');
 
         $kodeTerakhir = Loan::latest('id')->first()->id;
 
-        $kodePeminjaman = 'PMJ-' . $kodeTerakhir + 1;
+        $kodePeminjaman = 'PJM-' . ($kodeTerakhir + 1);
         // dd($kodePeminjaman);
         
         $request->merge(['kode_peminjaman' => $kodePeminjaman, 'tanggal_pinjam' => $tanggalPinjam]);
@@ -79,7 +110,13 @@ class LoanController extends Controller
      */
     public function edit(Loan $loan)
     {
-        //
+        // dd($loan);
+        return view('loans.edit', [
+            'title' => 'Edit Peminjaman Buku',
+            'loan' => $loan,
+            'members' => Member::all(),
+            'books' => Book::all()
+        ]);
     }
 
     /**
@@ -87,7 +124,22 @@ class LoanController extends Controller
      */
     public function update(Request $request, Loan $loan)
     {
-        //
+        $validatedData = $request->validate([
+            'member_id' => 'required',
+            'judul_buku' => 'required',
+            'tanggal_jatuh_tempo' => 'required|date',
+            'tanggal_kembali' => 'nullable|date',
+        ],
+        [ 
+            'member_id.required' => 'Anggota harus dipilih.',
+            'judul_buku.required' => 'Buku harus dipilih.',
+            'tanggal_jatuh_tempo.required' => 'Tanggal jatuh tempo harus diisi.',
+            'tanggal_jatuh_tempo.after_or_equal' => 'Tanggal jatuh tempo harus sama atau setelah tanggal hari ini.',
+        ]);
+
+        $loan->update($validatedData);
+
+        return to_route('loans.index')->with('success', 'Peminjaman berhasil diperbarui.');
     }
 
     /**

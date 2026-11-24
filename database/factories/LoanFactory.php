@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Book;
 use App\Models\Loan;
 use App\Models\Member;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -16,19 +17,23 @@ class LoanFactory extends Factory
      *
      * @return array<string, mixed>
      */
-
     public function definition(): array
     {
         $member = Member::inRandomOrder()->first();
+        $book = Book::inRandomOrder()->first();
+
+        $tanggalPinjam = $this->faker->dateTimeBetween('-2 months', 'now');
+        $jatuhTempo = (clone $tanggalPinjam)->modify('+7 days');
+        $tanggalKembali = $this->faker->optional()->dateTimeBetween($tanggalPinjam, 'now');
 
         return [
             'member_id' => $member->id,
-            'kode_peminjaman' => "PJM-",
-            'judul_buku' => $this->faker->sentence(3),
-            'tanggal_pinjam' => $this->faker->dateTimeBetween('-1 month', 'now')->format('d-m-Y'),
-            'tanggal_jatuh_tempo' => $this->faker->dateTimeBetween('now', '+1 month')->format('d-m-Y'),
-            'tanggal_kembali' => $this->faker->dateTimeBetween('now', '+1 month')->format('d-m-Y'),
-            'status' => $this->faker->randomElement(['dipinjam', 'dikembalikan', 'terlambat']),
+            'kode_peminjaman' => 'PJM-',
+            'judul_buku' => $book->judul,
+            'tanggal_pinjam' => $tanggalPinjam->format('Y-m-d'),
+            'tanggal_jatuh_tempo' => $jatuhTempo->format('Y-m-d'),
+            'tanggal_kembali' => $tanggalKembali?->format('Y-m-d'),
+            'status' => 'dipinjam',
             'denda' => 0,
         ];
     }
@@ -37,7 +42,7 @@ class LoanFactory extends Factory
     {
         return $this->afterCreating(function (Loan $loan) {
             $loan->update([
-                'kode_peminjaman' => 'PJM-' . $loan->id,
+                'kode_peminjaman' => 'PJM-'.$loan->id,
             ]);
         });
     }

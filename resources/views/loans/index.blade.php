@@ -23,6 +23,7 @@
                         <th>Judul Buku</th>
                         <th>Nama Peminjam</th>
                         <th>Tanggal Pinjam</th>
+                        <th>Tanggal Jatuh Tempo</th>
                         <th>Status</th>
                         <th>Denda</th>
                         <th class="text-center">Aksi</th>
@@ -37,15 +38,19 @@
                             <td>{{ $loan->judul_buku }}</td>
                             <td>{{ $loan->member->nama }}</td>
                             <td>{{ $loan->tanggal_pinjam }}</td>
+                            <td>{{ $loan->tanggal_jatuh_tempo }}</td>
                             <td>
                                 <span
                                     class="badge {{ in_array($loan->status, ['dikembalikan']) ? 'bg-success' : (in_array($loan->status, ['terlambat']) ? 'bg-danger' : 'bg-warning text-dark') }}">
                                     {{ $loan->status }}
                                 </span>
                             </td>
-                            <td>{{ $loan->denda }}</td>
+                            <td>{{ number_format($loan->denda, 0, ',', '.') }}</td>
                             <td class="text-center text-nowrap">
-                                -
+                                <a href="{{ route('loans.edit', $loan) }}" class="btn btn-sm btn-warning"
+                                    role="button" title="Edit">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
                             </td>
                         </tr>
                     @endforeach

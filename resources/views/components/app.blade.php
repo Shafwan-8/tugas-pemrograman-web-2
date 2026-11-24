@@ -22,10 +22,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('books.index') }}">Daftar Buku</a>
+                        <a class="nav-link active" href="{{ route('books.index') }}">Buku</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('members.index') }}">Daftar Anggota</a>
+                        <a class="nav-link" href="{{ route('members.index') }}">Anggota</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('loans.index') }}">Pinjaman</a>
