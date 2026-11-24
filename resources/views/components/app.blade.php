@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/3.1.6/css/dataTables.bootstrap5.min.css">
 </head>
 
 <body>
@@ -22,13 +23,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('books.index') }}">Buku</a>
+                        <a class="nav-link {{ Route::currentRouteName() === 'books.index' ? 'active' : '' }}" href="{{ route('books.index') }}">Buku</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('members.index') }}">Anggota</a>
+                        <a class="nav-link {{ Route::currentRouteName() === 'members.index' ? 'active' : '' }}" href="{{ route('members.index') }}">Anggota</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('loans.index') }}">Pinjaman</a>
+                        <a class="nav-link {{ Route::currentRouteName() === 'loans.index' ? 'active' : '' }}" href="{{ route('loans.index') }}">Pinjaman</a>
                     </li>
                 </ul>
             </div>
@@ -52,6 +53,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.datatables.net/3.1.6/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/3.1.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        new DataTable('#example');
     </script>
 </body>
 

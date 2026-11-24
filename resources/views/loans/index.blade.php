@@ -16,14 +16,14 @@
 
     <div class="card border-1 bordered shadow-sm">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0" id="example">
                 <thead class="table-light">
                     <tr>
                         <th class="text-center">Kode</th>
                         <th>Judul Buku</th>
                         <th>Nama Peminjam</th>
-                        <th>Tanggal Pinjam</th>
-                        <th>Tanggal Jatuh Tempo</th>
+                        <th class="text-center">Tanggal Pinjam</th>
+                        <th class="text-center">Tanggal Jatuh Tempo</th>
                         <th>Status</th>
                         <th>Denda</th>
                         <th class="text-center">Aksi</th>
@@ -37,8 +37,8 @@
                             </th>
                             <td>{{ $loan->judul_buku }}</td>
                             <td>{{ $loan->member->nama }}</td>
-                            <td>{{ $loan->tanggal_pinjam }}</td>
-                            <td>{{ $loan->tanggal_jatuh_tempo }}</td>
+                            <td class="text-center">{{ $loan->tanggal_pinjam }}</td>
+                            <td class="text-center">{{ $loan->tanggal_jatuh_tempo }}</td>
                             <td>
                                 <span
                                     class="badge {{ $loan->status === 'dikembalikan' ? 'bg-success' : ($loan->status === 'terlambat' ? 'bg-danger' : 'bg-warning text-dark') }}">

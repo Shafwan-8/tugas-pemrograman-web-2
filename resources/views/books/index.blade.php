@@ -19,7 +19,7 @@
 
     <div class="card border-1 bordered shadow-sm">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0" id="example">
                 <thead class="table-light">
                     <tr>
                         <th class="text-center">#</th>
